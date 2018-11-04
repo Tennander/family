@@ -1,0 +1,10 @@
+group 'se.tennander.famlly'
+version '1.0-SNAPSHOT'
+
+wrapper {
+    gradleVersion = 4.10
+}
+
+repositories {
+    mavenCentral()
+}
