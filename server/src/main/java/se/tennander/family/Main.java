@@ -7,21 +7,24 @@ import com.google.inject.Inject;
 import io.javalin.Javalin;
 import io.javalin.apibuilder.ApiBuilder;
 import io.javalin.apibuilder.EndpointGroup;
+import se.tennander.family.config.Port;
 
 public class Main {
 
   private final Javalin javalin;
   private final Set<Service> services;
+  private final int port;
 
   @Inject
-  public Main(Javalin javalin, Set<Service> services) {
+  public Main(Javalin javalin, Set<Service> services, @Port int port) {
     this.javalin = javalin;
     this.services = services;
+    this.port = port;
   }
 
   private void startServer() {
     services.forEach(s -> s.wire(generateRoutes(s.serviceName())));
-    javalin.start(8080);
+    javalin.start(port);
   }
 
   private Service.Routes generateRoutes(String serviceName) {

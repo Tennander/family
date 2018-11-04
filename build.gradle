@@ -8,3 +8,5 @@ wrapper {
 repositories {
     mavenCentral()
 }
+
+task stage(dependsOn: ':server:installDist')
