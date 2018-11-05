@@ -1,11 +1,14 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'se.tennander.famlly'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 11
+sourceCompatibility = 1.8
+
+mainClassName = "se.tennander.family.Main"
 
 repositories {
     mavenCentral()
