@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: The Family Api
+  description: The full api of our family process.
+  version: 0.1
+servers:
+  - url: http://family.tennander.se/api
+    description: Main (production) server
+  - url: /api
+    description: Local test machine.
+
+paths:
+  /hello/world:
+    get:
+      tags:
+        - Hello
+      summary: Returns "Hello world!".
+      description: Used to verify that the service is live.
+      responses:
+        '200':    # status code
+          description: A JSON string of `"Hello world!!"`
+          content:
+            application/json:
+              schema:
+                type: string

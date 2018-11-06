@@ -23,15 +23,16 @@ public class Main {
   }
 
   private void startServer() {
-    services.forEach(s -> s.wire(generateRoutes(s.serviceName())));
+    services.forEach(s -> s.wire(generateRoutes("/api/", s.serviceName())));
+    javalin.enableStaticFiles("/static");
     javalin.start(port);
   }
 
-  private Service.Routes generateRoutes(String serviceName) {
+  private Service.Routes generateRoutes(String prefix, String serviceName) {
     return (String route, EndpointGroup endpointGroup) ->
         javalin.routes(() -> {
           String trimmed = route.replaceAll("^/", "");
-          ApiBuilder.path("/api/" + serviceName + "/" + trimmed, endpointGroup);
+          ApiBuilder.path(prefix + serviceName + "/" + trimmed, endpointGroup);
         });
   }
 

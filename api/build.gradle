@@ -1,0 +1,24 @@
+plugins {
+    id 'org.hidetake.swagger.generator' version '2.14.0'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    swaggerCodegen 'io.swagger.codegen.v3:swagger-codegen-cli:3.0.0'
+    swaggerUI 'org.webjars:swagger-ui:3.10.0'
+}
+
+swaggerSources {
+    family {
+        inputFile = file('api.yml')
+        code {
+            language = 'spring'
+            configFile = file('config.json')
+            // Validate YAML before code generation
+            dependsOn validation
+        }
+    }
+}
