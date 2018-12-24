@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: The Family App
+  description: This is the main API specification of the Family app.
+  version: 0.1.9
+servers:
+  - url: http://family.tennander.se/api/v1
+    description: Production server
+  - url: http://localhost:8080/api/v1
+    description: Local developer server.
+
+tags:
+  - name: Health Checks
+    description: End points used to check the health of the service.
+
+paths:
+  /health/alive:
+    get:
+      tags:
+        - Health Checks
+      summary: Get a "yes" response if service is alive.
+      description: This service is used for checking that the service is live.
+      responses:
+        200:
+          description: The service lives.
+          content:
+            application/json:
+              schema:
+                type: string
+                example:
+                  yes
