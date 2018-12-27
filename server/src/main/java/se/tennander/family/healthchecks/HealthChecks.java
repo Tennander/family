@@ -1,22 +1,22 @@
-package se.tennander.family.hello;
+package se.tennander.family.healthchecks;
 
 import static io.javalin.apibuilder.ApiBuilder.get;
 
 import io.javalin.Context;
 import se.tennander.family.Service;
 
-class World implements Service {
+class HealthChecks implements Service {
   @Override
   public String serviceName() {
-    return "hello";
+    return "health";
   }
 
   @Override
-  public void wire(Routes route) {
-    route.addRoute("world", () -> get(this::helloWorld));
+  public void wire(Wiring route) {
+    route.addRoute("alive", () -> get(this::helloWorld));
   }
 
   private void helloWorld(Context context) {
-    context.json("Hello world!!");
+    context.json("yes");
   }
 }
