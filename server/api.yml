@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: The Family App
   description: This is the main API specification of the Family app.
-  version: 0.1.9
+  version: 0.2.0
 servers:
   - url: /api/v1
     description: This server.
@@ -12,6 +12,8 @@ servers:
 tags:
   - name: Health Checks
     description: End points used to check the health of the service.
+  - name: Family Members
+    description: Information about family members.
 
 paths:
   /health/alive:
@@ -29,3 +31,101 @@ paths:
                 type: string
                 example:
                   yes
+  /members:
+    get:
+      tags:
+        - Family Members
+      summary: Returns a list of members.
+      responses:
+        200:
+          description: The members in your family.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberHeader'
+    post:
+      tags:
+        - Family Members
+      summary: Create a new family member.
+      requestBody:
+        description: The member to add to your family.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+      responses:
+        200:
+          description: Adds the posted member to the family.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+  /members/{id}:
+    get:
+      tags:
+        - Family Members
+      summary: Get a specific member.
+      parameters:
+        - name: id
+          in: path
+          description: The member id
+          example: 1337
+          schema:
+            type: integer
+      responses:
+        200:
+          description: The member exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+        404:
+          description: Could not find a member with the given id.
+
+components:
+  schemas:
+    MemberHeader:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Member Id.
+          example: 1337
+          readOnly: true
+        givenName:
+          type: string
+          description: Given name.
+          example: John
+        surName:
+          type: string
+          description: Users surname.
+          example: Dow
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Member Id.
+          example: 1337
+          readOnly: true
+        givenName:
+          type: string
+          description: Given name.
+          example: John
+        surName:
+          type: string
+          description: Users surname.
+          example: Dow
+        nickName:
+          type: string
+          description: The users nickname.
+          example: Jonny
+          nullable: true
+          default: null
+        shoeSize:
+          type: string
+          description: Shoe size.
+          example: 41.5
+          nullable: true
