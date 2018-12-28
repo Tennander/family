@@ -4,14 +4,16 @@
 package se.tennander.family.member;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.javalin.Context;
 import io.javalin.apibuilder.ApiBuilder;
 import se.tennander.family.Service;
+import se.tennander.family.member.storage.Member;
+import se.tennander.family.member.storage.MemberStorage;
 
 /**
  * @author bjorn
@@ -35,22 +37,26 @@ public class MemberService implements Service {
 	public void wire(Wiring wiring) {
 		wiring.addRoute("/", () -> ApiBuilder.get(this::getMembers));
 		wiring.addRoute("/", () -> ApiBuilder.post(this::addMember));
-		wiring.addRoute("/:memberId", () -> ApiBuilder.get(this::getMember));
+		wiring.addRoute("/:id", () -> ApiBuilder.get(this::getMember));
 	}
 
 	private void getMembers(Context context) {
-		Collection<MemberHeader> headers = memberStorage.getMembers().stream()
-				.map(MemberHeader::from)
+		Collection<MemberHeaderView> headers = memberStorage.getMembers()
+				.map(MemberHeaderView::create)
 				.collect(Collectors.toList());
 		context.json(headers);
 	}
 
 	private void addMember(Context context) {
-		context.json("adding member...");
-	}
+    JsonNode jsonMember = context.bodyAsClass(JsonNode.class);
+    Member storedMember = memberStorage.addMember(
+        jsonMember.get("givenName").asText(),
+        jsonMember.get("surName").asText());
+    context.json(storedMember);
+  }
 
 	private void getMember(Context context) {
-		int id = Integer.valueOf(context.pathParam("memberId"));
+		int id = Integer.parseInt(context.pathParam("id"));
 		context.json(memberStorage.getMember(id));
 	}
 }

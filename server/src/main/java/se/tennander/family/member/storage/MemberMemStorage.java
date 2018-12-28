@@ -1,36 +1,31 @@
-/**
- * 
- */
-package se.tennander.family.member;
+package se.tennander.family.member.storage;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
-/**
- * @author bjorn
- *
- */
 public class MemberMemStorage implements MemberStorage {
 
-	Map<Integer, Member> members;
-	AtomicInteger nextMemberId = new AtomicInteger(100);
+	private Map<Integer, Member> members = new HashMap<>();
+	private AtomicInteger nextMemberId = new AtomicInteger(100);
 	
 	@Override
 	public Member getMember(int memberId) {
-		return members.get(memberId);
+    return new Member(members.get(memberId));
 	}
 
 	@Override
-	public Collection<Member> getMembers() {
-		return members.values();
+	public Stream<Member> getMembers() {
+		return members.values().stream();
 	}
 
 	@Override
 	public Member addMember(String givenName, String surName) {
 		int memberId = nextMemberId.addAndGet(1);
 		Member newMember = new Member(memberId, givenName, surName);
-		return newMember;
+    store(newMember);
+    return new Member(newMember);
 	}
 
 	@Override
