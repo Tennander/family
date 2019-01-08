@@ -13,7 +13,7 @@ class HealthChecks implements Service {
 
   @Override
   public void wire(Wiring route) {
-    route.addRoute("alive", () -> get(this::helloWorld));
+    route.addRoute("/alive", () -> get(this::helloWorld));
   }
 
   private void helloWorld(Context context) {

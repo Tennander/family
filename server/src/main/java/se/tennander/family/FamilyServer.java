@@ -31,8 +31,8 @@ public class FamilyServer {
   private Service.Wiring generateRoutes(String prefix, String serviceName) {
     return (String route, EndpointGroup endpointGroup) ->
         javalin.routes(() -> {
-          String trimmed = route.replaceAll("^/", "");
-          ApiBuilder.path(prefix + "/" + serviceName + "/" + trimmed, endpointGroup);
+          String trimmed = route.replaceAll("^/?(\\w+)", "/$1");
+          ApiBuilder.path(prefix + "/" + serviceName + trimmed, endpointGroup);
         });
   }
 
